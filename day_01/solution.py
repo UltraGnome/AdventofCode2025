@@ -48,15 +48,21 @@ class Part2:
             direction = line[0]
             try:
                 step = int(line[1:])
+                spins = int(step / 100)
+                result += spins
             except ValueError:
                 print(f'error: invalid number in "{line}"')
                 continue
 
             if direction == 'L':
-                dial_value = (dial_value - step) % 100
+                 dial_value = (dial_value - step) % 100
+                 if previous_dial_value > dial_value & dial_value != 0:
+                     result += 1
 
             elif direction == 'R':
                 dial_value = (dial_value + step) % 100
+                if previous_dial_value < dial_value & dial_value != 0:
+                    result += 1
 
             else:
                 print(f'error: unknown direction in "{line}" dial={dial_value}')
@@ -71,8 +77,8 @@ class Part2:
         return result
 
 
-# with open("test_input2.txt", "r") as file:
-with open("input.txt", "r") as file:
+with open("test_input2.txt", "r") as file:
+# with open("input.txt", "r") as file:
     f = file.read().splitlines()
 
 # print(f"Test input: {Part1.solution(f)}")
