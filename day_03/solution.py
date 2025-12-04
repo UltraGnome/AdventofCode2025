@@ -50,53 +50,40 @@ class Part1:
         return process_lines(file_lines)
 
 
-# class Part2:
+class Part2:
 
-    # @staticmethod
-    # def solution(file_lines: list[str]) -> int:
-    #     result = 0
-    #     count = 0
-    #
-    #     for bank in file_lines:
-    #         count += 1
-    #
-    #         first_pointer = 0
-    #         first_index = 0
-    #         next_pointer = 0
-    #
-    #         first_digit = "0"
-    #         next_digit = "0"
-    #
-    #         while first_pointer < len(bank) - 1:
-    #             if int((bank[first_pointer])) > int(first_digit):
-    #                 first_digit = bank[first_pointer]
-    #                 first_index = first_pointer
-    #                 next_pointer = first_index + 1
-    #
-    #             first_pointer += 1
-    #
-    #         while next_pointer < len(bank):
-    #
-    #             if int((bank[next_pointer])) > int(next_digit):
-    #                 next_digit = bank[next_pointer]
-    #
-    #                 next_pointer += 1
-    #
-    #         print(f"{count} - found: {first_digit}{second_digit} from {bank}")
-    #
-    #         result += int(first_digit + second_digit)
-    #
-    #     return result
-    #
+    def solution(file_lines: list[str]) -> int:
+        result = 0
+
+        for bank in file_lines:
+            if bank:
+                res = Part2.largest_number_after_deletion(bank)
+                result += int(res)
+        return result
+
+    def largest_number_after_deletion(num_str):
+        k = len(num_str) - 12 # Number of digits to delete (100 - 12)
+        stack = []
+        for digit in num_str:
+            while stack and stack[-1] < digit and k > 0:
+                stack.pop()
+                k -= 1
+            stack.append(digit)
+        # If we still have deletions left, remove from the end
+        while k > 0:
+            stack.pop()
+            k -= 1
+        # The result should be 12 digits long
+        result = "".join(stack[:12])
+        return result
 
 
-
-with open("test_input.txt", "r") as file:
-# with open("input.txt", "r") as file:
+# with open("test_input.txt", "r") as file:
+with open("input.txt", "r") as file:
     f = file.read().splitlines()
 
-print(f"Part 1: {Part1.solution(f)}")
-# print(f"Part 2: {Part2.solution(f)}")
+# print(f"Part 1: {Part1.solution(f)}")
+print(f"Part 2: {Part2.solution(f)}")
 
 
 
