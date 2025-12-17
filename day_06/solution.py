@@ -1,5 +1,4 @@
 import math
-import itertools
 import re
 
 class Part1:
@@ -37,32 +36,40 @@ def pad_number(match):
     return format(number, "03d")
 
 class Part2:
-    def solution(_matrix: list[list[str]]) -> int:
+    def solution(grid: list[str]) -> int:
         result = 0
 
         column_index = 0  # To get the second column (index 1)
 
-        col_count = len(_matrix[0])
+        col_count = len(grid[0])
 
-        for c in range(column_index,col_count):
-            column = [row[c] for row in _matrix]
+        sign = "+"
+        cols = list(zip(*grid))
 
-            column.reverse()
-            sign = column[0]
-            nums = column[1:]
+        groups = []
+        group = []
 
-            int_list = [int(s) for s in nums]
-            if sign == '+':
-                result += sum(int_list)
+        for col in cols:
+            if set(col) == {" "}:
+                groups.append(group)
+                group = []
             else:
-                result += math.prod(int_list)
+                group.append(col)
 
-        return result
+        groups.append(group)
+
+        total = 0
+
+        for group in groups:
+            total += eval(group[0][-1].join("".join(line[:-1]) for line in group))
+
+        print(total)
 
 
-with open("test_input.txt", "r") as file:
-# # with open("input.txt", "r") as file:
-    f = file.read().splitlines()
+with open("input.txt", "r") as file:
+
+    grid = [line.rstrip('\n') for line in open("input.txt")]
+    # grid = file.readlines()
 #     clean_list = []
 #     for line in f:
 #         line = line.strip()
@@ -80,6 +87,6 @@ with open("test_input.txt", "r") as file:
 
 
 # print(f"Part 1: {Part1.solution(ff)}")
-print(f"Part 2: {Part2.solution(f)}")
+print(f"Part 2: {Part2.solution(grid)}")
 
 # print(f"Part 2: {Part2.solution('input.txt')}")
