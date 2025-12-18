@@ -70,18 +70,44 @@ class Part1:
 
         return result
  
+class Part2:
+    def solution(nodes: list[tuple[int, int, int]]) -> int:
+
+        parents = {i:i for i in range(len(nodes))}
+    
+        # find the distances that every is away from eachother
+        distances = get_distances(nodes)
+    
+        # use Union Find to combine nodes into circuits
+        distances.sort()
+        for _,i,j in distances:
+    
+            # skip the items that are in the same circuit
+            if find(parents, i) == find(parents, j):
+                continue
+    
+            # combine the circuits
+            union(parents, i, j)
+    
+            if all(find(parents, 0) == find(parents, i) for i in range(len(nodes))):
+                break
+    
+        x1,_,_ = nodes[i]
+        x2,_,_ = nodes[j]
+    
+        return x1 * x2
 
 
-with open("test_input.txt", "r") as file:
-# with open("input.txt", "r") as file:
+# with open("test_input.txt", "r") as file:
+with open("input.txt", "r") as file:
     f = file.read().splitlines()
 
 # data = [line.rstrip() for line in infile.readlines()]
     data = [line.split(',') for line in f]
     ff = [(int(x), int(y), int(z)) for x,y,z in data]
 
-print(f"Part 1: {Part1.solution(ff)}")
-# print(f"Part 2: {Part2.solution(f)}")
+# print(f"Part 1: {Part1.solution(ff)}")
+print(f"Part 2: {Part2.solution(ff)}")
 
 # print(f"Part 2: {Part2.solution('input.txt')}")
 
